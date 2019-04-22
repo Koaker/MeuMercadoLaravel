@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Gate;
 use App\produtoFornecedor;
+use App\Produto;
 use Illuminate\Support\Facades\DB;
 
 class produtoFornecedorControlador extends Controller
@@ -51,6 +52,7 @@ class produtoFornecedorControlador extends Controller
           if(!Gate::allows('isAdmin')){
             abort(404,'Você não tem acesso a esta funcionalidade');
         }
+       
 
         $produtoFornecedor = new produtoFornecedor();
         $produtoFornecedor->produto = $request->input('pf_produto');
@@ -60,6 +62,12 @@ class produtoFornecedorControlador extends Controller
         $produtoFornecedor->ativo = 1;
         
         $produtoFornecedor->save();
+
+         $produto = Produto::find($produtoFornecedor->produto);
+         
+         $produto->estoque = $produto->estoque + $produtoFornecedor->estoque_entrada;
+         $produto->save();
+
         return redirect(route('produtofornecedor_listar'));
 
     }

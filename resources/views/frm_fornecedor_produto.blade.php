@@ -26,10 +26,12 @@
                             @include('forms/produto_fornecedor')
                             
                                 <button type="submit" class="btn btn-success btn-sm"> Cadastrar </button>
-                                <button type="cancel" class="btn btn-danger btn-sm"> Cancelar </button>
+                               
                                  
                            
                             </form>
+                            <hr>
+                             <a href="{{ route('home') }}"><button type="cancel" class="btn btn-danger btn-sm"> Cancelar </button> </a>
                         </div>
                           
                     </div>                    

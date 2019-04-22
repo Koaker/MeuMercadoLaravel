@@ -23,38 +23,37 @@
                         </div>
 
                         <div class="card-body">
-                            <table class="table table-bordered table-hover" id="tabela_produtos">
+                            <table class="table table-bordered table-hover table-striped" id="tabela_produtos">
                                 <thead>
                                     <th> Código  </th>
                                     <th> Nome    </th>
                                     <th> Tipo    </th>
-                                    <th> Valor R$  </th>
-                                    <th> Estoque Inicial </th>
-                                    <th> Fornecedor </th>
+                                    <th> Valor R$  </th>                                    
                                     <th> Vendas  </th>
                                     <th> Estoque Loja </th>
                                     <th> Estoque Mínimo </th>
-                                    <th> Editar </th>
-                                    <th> Vender </th>
+                                    <th> Editar </th>                                   
                                     <th> Inativar </th>
+                                    <th> Excluir </th>
                                 </thead>
                                 
                                 <tbody>
                                     @foreach($produto as $p)
+                                    
                                     <tr>
+
                                         <td>{{$p->id}}</td>
                                         <td>{{$p->nome}}</td>
                                         <td>{{$p->tipo}}</td>
-                                        <td>{{$p->valor}}</td>
-                                        <td>{{$p->estoque}}</td>
-                                        <td>{{$p->fornecedor}}</td>
+                                        <td>{{$p->valor}}</td>       
                                         <td>{{$p->vendas}}</td>
-                                        <td>{{$p->estoque_loja}}</td>
+                                        <td>{{$p->estoque}}</td>
                                         <td>{{$p->estoque_minimo}}</td>
-                                        <td><button class="btn btn-primary shadow-sm" data-valor ="{{$p->valor}}" data-tipo="{{$p->tipo}}" data-nome="{{$p->nome}}" data-toggle="modal" data-target="#editModal"> Editar </button></td>
-                                        <td><button class="btn btn-success"> Vender </button></td>
+                                        <td><button class="btn btn-primary shadow-sm" data-valor ="{{$p->valor}}" data-tipo="{{$p->tipo}}" data-nome="{{$p->nome}}" data-toggle="modal" data-target="#editModal"> Editar </button></td>                                        
                                         <td><button class="btn btn-danger" > Inativar </button></td>
+                                        <td><button class="btn btn-danger"> Excluir  </button></td>
                                     </tr>
+                                      
                                     @endforeach
 
                                 </tbody>

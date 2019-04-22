@@ -45,9 +45,16 @@
                                         <td>{{$p->estoque_minimo}}</td>
                                         <td>{{$p->estoque_entrada}}</td>                                      
                                                                         
-                                        <td><button class="btn btn-primary shadow-sm" >Editar</button></td>                                       
+                                        <td><button class="btn btn-primary shadow-sm" >Editar</button></td>  
+                                        @can('isAdmin')                                     
                                         <td><button class="btn btn-danger" > Inativar </button></td>
                                         <td><button class="btn btn-danger" > Excluir </button></td>
+                                        @endcan
+
+                                         @can('isVendedor')                                     
+                                        <td><button class="btn btn-danger" disabled > Inativar </button></td>
+                                        <td><button class="btn btn-danger" disabled > Excluir </button></td>
+                                        @endcan
                                     </tr>
                                     @endforeach
 

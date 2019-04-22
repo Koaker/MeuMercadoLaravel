@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('/home');
 });
 
+
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -23,6 +25,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/cadastrarProdutos', 'ProdutoControlador@create' )->name('produto_cadastro');
 Route::get('/listarProdutos', 'ProdutoControlador@index' )->name('produto_listar');
 Route::post('/salvarProduto', 'ProdutoControlador@store' )->name('produto_salvar');
+
+Route::post('/editarProduto', 'ProdutoControlador@update' )->name('produto_editar');
 
 /*FINAL PRODUTO*/
 
@@ -43,6 +47,16 @@ Route::post('/salvarProdutoFornecedor', 'produtoFornecedorControlador@store' )->
 
 
 /* FINAL PRODUTO E FORNECEDOR */
+
+
+/* VENDAS */
+
+Route::get('/venda', 'ProdutoControlador@venda' )->name('venda_listar');
+Route::post('/salvarVenda', 'ProdutoControlador@efetuar_venda' )->name('venda_efetuar');
+Route::post('/cancelarVenda', 'ProdutoControlador@cancelar_venda' )->name('venda_cancelar');
+
+
+/* FINAL VENDAS */
 
 
 

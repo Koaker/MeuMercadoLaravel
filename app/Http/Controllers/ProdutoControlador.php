@@ -22,6 +22,53 @@ class ProdutoControlador extends Controller
      * 
      */
 
+
+     public function cancelar_venda(Request $request){
+        
+         if(!Gate::allows('isAdmin')){
+            abort(404,'Você não tem acesso a esta funcionalidade');
+        }
+
+        $produto = Produto::find($request->input('id_produto'));
+        $produto_cancelado = $request->input('venda_quantidade_cancelada');
+        
+        if($produto->vendas != 0) {
+            $produto->vendas -= $produto_cancelado;
+        } else if ($produto->vendas <= 0) {
+            $produto->vendas = 0;
+            
+            return redirect()->back()->with('venda_zerada','O produto já está com a venda zerada');
+        }
+
+
+        if($produto->vendas < 0) {
+            $produto->vendas = 0;
+        }
+
+        $produto->estoque += $produto_cancelado;
+
+        $produto->save();
+
+        return redirect(route('venda_listar'));
+    }
+
+     public function efetuar_venda(Request $request){
+
+        $produto = Produto::find($request->input('id_produto'));
+        $produto_venda = $request->input('venda_quantidade');
+
+        $produto->vendas +=  $produto_venda;
+        $produto->estoque -= $produto_venda;
+        $produto->save();
+
+        return redirect(route('venda_listar'));
+    }
+
+    public function venda(){
+        $produto = Produto::all();
+        return view('listar_vendas', compact('produto'));
+    }
+
     public function index()
     {
      
@@ -53,13 +100,24 @@ class ProdutoControlador extends Controller
          if(!Gate::allows('isAdmin')){
             abort(404,'Você não tem acesso a esta funcionalidade');
         }
+
+        $mensagens = [
+            'produto_nome.required' => 'O Nome é obrigatório',
+            'produto_nome.unique' => 'Este produto já está cadastrado',
+            'produto_valor.required' => 'O valor é obrigatório',
+            'produto_estoque_minimo.required' => 'O estoque mínimo é obrigatório',
+            'produto_estoque_minimo.numeric' => 'O valor do estoque deve ser númerico',
+            'produto_tipo.string' => 'O tipo não deve ser um valor númerico',
+            'produto_tipo.required' => 'O tipo do produto é obrigatório' 
+
+        ];
         
         $request->validate([
             'produto_nome' => 'required|unique:produtos,nome',
             'produto_valor' => 'required',
             'produto_estoque_minimo' => 'required|numeric',
-
-        ]);
+            'produto_tipo' => 'required|string'
+        ], $mensagens);
 
         $produto = new Produto();
         $produto->nome = $request->input('produto_nome');
@@ -104,9 +162,46 @@ class ProdutoControlador extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+            if(!Gate::allows('isAdmin')){
+            abort(404,'Você não tem acesso a esta funcionalidade');
+        }
+
+          $mensagens = [
+            'produto_nome.required' => 'O Nome é obrigatório',
+            'produto_nome.unique' => 'Este produto já está cadastrado',
+            'produto_valor.required' => 'O valor é obrigatório',
+            'produto_estoque_minimo.required' => 'O estoque mínimo é obrigatório',
+            'produto_estoque_minimo.numeric' => 'O valor do estoque deve ser númerico',
+            'produto_tipo.string' => 'O tipo não deve ser um valor númerico',
+            'produto_tipo.required' => 'O tipo do produto é obrigatório' 
+
+        ];
+        
+        $request->validate([
+            'produto_nome' => 'required|unique:produtos,nome',
+            'produto_valor' => 'required',
+            'produto_estoque_minimo' => 'required|numeric',
+            'produto_tipo' => 'required|string'
+        ], $mensagens);
+
+
+        $produto = Produto::find($request->input('id_produto'));          
+         $produto->nome = $request->input('produto_nome');
+        $produto->tipo = $request->input('produto_tipo');
+
+            $valor = str_replace(',','.',$request->input('produto_valor') );
+        $produto->valor = $valor;     
+
+        $produto->estoque_minimo = $request->input('produto_estoque_minimo');
+        $produto->estoque =  $request->input('produto_estoque');
+
+        $produto->save();
+
+        return redirect(route('produto_listar'));
+    
     }
 
     /**

@@ -34,9 +34,7 @@ class FornecedorControlador extends Controller
     public function create()
     {
         //
-        if(!Gate::allows('isAdmin')){
-            abort(404,'Você não tem acesso a esta funcionalidade');
-        }
+       
         return view('frm_fornecedor');
     }
 
@@ -48,9 +46,7 @@ class FornecedorControlador extends Controller
      */
     public function store(Request $request)
     {
-         if(!Gate::allows('isAdmin')){
-            abort(404,'Você não tem acesso a esta funcionalidade');
-        }
+         
 
          $request->validate([
             'fornecedor_nome' => 'required|string',
