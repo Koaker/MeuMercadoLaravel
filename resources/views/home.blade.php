@@ -21,13 +21,13 @@
                     @can('isAdmin')
                     Você esta logado como admnistrador!
                    
-                     @include('Auth/admin')
+                     @include('auth/admin')
                  
                     @endcan
 
                     @can('isVendedor')
                     Você está logado como Vendedor
-                     @include('Auth/vendedor')
+                     @include('auth/vendedor')
                     @endcan
                  
                 </div>
