@@ -43,7 +43,7 @@ class ProdutoControlador extends Controller
         
           
          if($produto->vendas < $produto_cancelado){
-            $produto_cancelado = $produto-vendas;   
+            $produto_cancelado = $produto->vendas;   
          }
 
         if($produto->vendas < 0) {
