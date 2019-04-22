@@ -30,8 +30,9 @@ class ProdutoControlador extends Controller
         }
 
         $produto = Produto::find($request->input('id_produto'));
-        $produto_cancelado = $request->input('venda_quantidade_cancelada');
+        $produto_cancelado = $request->input('venda_quantidade_cancelada');    
         
+         
         if($produto->vendas != 0) {
             $produto->vendas -= $produto_cancelado;
         } else if ($produto->vendas <= 0) {
@@ -39,7 +40,11 @@ class ProdutoControlador extends Controller
             
             return redirect()->back()->with('venda_zerada','O produto já está com a venda zerada');
         }
-
+        
+          
+         if($produto->vendas < $produto_cancelado){
+            $produto_cancelado = $produto-vendas;   
+         }
 
         if($produto->vendas < 0) {
             $produto->vendas = 0;
