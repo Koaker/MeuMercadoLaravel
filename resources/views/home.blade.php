@@ -19,7 +19,7 @@
                     @endif
 
                     @can('isAdmin')
-                    Você esta logado como admnistrador!
+                    Você esta logado como administrador!
                    
                      @include('auth/admin')
                  

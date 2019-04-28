@@ -39,7 +39,7 @@
                                 
                                 <tbody>
                                     @foreach($produto as $p)
-                                    
+                                   
                                     <tr>
 
                                         <td>{{$p->id}}</td>
@@ -49,17 +49,31 @@
                                         <td>{{$p->vendas}}</td>
                                         <td>{{$p->estoque}}</td>
                                         <td>{{$p->estoque_minimo}}</td>
+                                       
                                         <td><button class="btn btn-primary shadow-sm" data-id='{{$p->id}}' data-estoque='{{$p->estoque}}' data-stoker='{{$p->estoque_minimo}}' data-valor="{{$p->valor}}" data-tipo="{{$p->tipo}}" data-nome="{{$p->nome}}" data-toggle="modal" data-target="#editModal"> Editar </button></td> 
-                                         @can('isAdmin')                                        
-                                        <td><button class="btn btn-danger" > Inativar </button></td>
-                                        <td><button class="btn btn-danger"> Excluir  </button></td>
+                                         
+                                         @can('isAdmin')  
+                                             @if($p->ativo == 1)
+                                             <td><a href="{{ route('produto_status', $p->id) }}"> <button class="btn btn-danger" value='{{$p->id}}'> Inativar </button> </a></td>                             
+                                             @else
+                                              <td><a href="{{ route('produto_status', $p->id)  }}"> <button class="btn btn-success" > Ativar </button> </a></td>                                              
+                                             @endif                                              
                                         @endcan
+
+
                                          @can('isVendedor') 
-                                         <td><button class="btn btn-danger" disabled > Inativar </button></td>
-                                        <td><button class="btn btn-danger" disabled> Excluir  </button></td>
+                                            @if($p->ativo == 1)
+                                               <td><button class="btn btn-danger" disabled > Inativar </button></td>
+                                                     
+                                             @else
+
+                                               </tr> <td><button class="btn btn-success" disabled > Ativar </button></td>
+                                              
+                                             @endif  
+                                       
                                          @endcan
-                                    </tr>
-                                      
+                                   
+                                      <td><button class="btn btn-danger"> Excluir  </button></td>
                                     @endforeach
 
                                 </tbody>

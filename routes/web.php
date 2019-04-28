@@ -25,9 +25,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/cadastrarProdutos', 'ProdutoControlador@create' )->name('produto_cadastro');
 Route::get('/listarProdutos', 'ProdutoControlador@index' )->name('produto_listar');
 Route::post('/salvarProduto', 'ProdutoControlador@store' )->name('produto_salvar');
-
 Route::post('/editarProduto', 'ProdutoControlador@update' )->name('produto_editar');
-
+Route::get('/statusProduto/{id}', 'ProdutoControlador@status' )->name('produto_status');
 /*FINAL PRODUTO*/
 
 

@@ -22,6 +22,24 @@ class ProdutoControlador extends Controller
      * 
      */
 
+    public function status(Request $request){
+
+          if(!Gate::allows('isAdmin')){
+            abort(404,'Você não tem acesso a esta funcionalidade');
+        }
+
+
+       $produto = Produto::find($request->id);
+       
+       if($produto->ativo)
+       $produto->ativo= 0;
+       else
+        $produto->ativo = 1;
+
+
+        $produto->save();
+         return redirect(route('produto_listar'));
+    }
 
      public function cancelar_venda(Request $request){
         
@@ -63,6 +81,12 @@ class ProdutoControlador extends Controller
 
         return redirect(route('venda_listar'));
     }
+
+    /**
+     * View da Venda
+     *
+     * @return \Illuminate\Http\Response
+     */
 
     public function venda(){
         $produto = Produto::all();
