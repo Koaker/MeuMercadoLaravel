@@ -12,7 +12,7 @@
 
 
 <div class="form-group">
-    <label for="pf_produto"> Fornecedor:  </label>
+    <label for="pf_produto"> Produto:  </label>
 
     <select class="form-control" id='pf_produto' name='pf_produto'>
         <option hidden selected disabled>Selecine o produto</option>

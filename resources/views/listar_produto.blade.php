@@ -20,6 +20,42 @@
                            <div class="card-title">
                            Lista de produtos
                             </div>
+                                <div class='row'>
+                                  <div class='col-md-5'>
+                                       <a href="{{route('produto_cadastro')}}"><button class="btn btn-success">Adicionar Produto</button></a>
+                                  </div>
+                                 
+                                </div>
+                            
+                            <div class="row"> 
+                                <div class="col-md-12">
+
+
+                                <div class="form-group">
+
+                                  <label for="pesquisa_produto">Pesquisar por: </label>
+                                 
+                                  <select id="select_pesquisa" class="form-control" style="width: 7%;">
+                                    <option value='1' selected>Nome</option>
+                                    <option value='2'>Tipo</option>
+                                  </select>                                       
+                                  
+                                </div>
+
+                                <div class="form-group" style="width: 40%;">      
+
+                                  <input type="text" id="pesquisa_produto" class="form-control" placeholder="Pesquise aqui">
+
+                                </div>
+                                
+                            
+                              
+                              </div>
+                                  
+                          </div>                             
+                              
+                            
+                           
                         </div>
 
                         <div class="card-body">
@@ -30,6 +66,7 @@
                                     <th> Tipo    </th>
                                     <th> Valor R$  </th>                                    
                                     <th> Vendas  </th>
+                                    <th> Estoque de Entrada </th>
                                     <th> Estoque Loja </th>
                                     <th> Estoque Mínimo </th>
                                     <th> Editar </th>                                   
@@ -42,15 +79,16 @@
                                    
                                     <tr>
 
-                                        <td>{{$p->id}}</td>
-                                        <td>{{$p->nome}}</td>
-                                        <td>{{$p->tipo}}</td>
+                                        <td >{{$p->id}}</td>
+                                        <td class='td_nome_produto'>{{$p->nome}}</td>
+                                        <td class='td_tipo_produto'>{{$p->tipo}}</td>
                                         <td>{{$p->valor}}</td>       
                                         <td>{{$p->vendas}}</td>
+                                        <td>{{$p->estoque_entrada}}</td>
                                         <td>{{$p->estoque}}</td>
                                         <td>{{$p->estoque_minimo}}</td>
                                        
-                                        <td><button class="btn btn-primary shadow-sm" data-id='{{$p->id}}' data-estoque='{{$p->estoque}}' data-stoker='{{$p->estoque_minimo}}' data-valor="{{$p->valor}}" data-tipo="{{$p->tipo}}" data-nome="{{$p->nome}}" data-toggle="modal" data-target="#editModal"> Editar </button></td> 
+                                        <td><button class="btn btn-primary shadow-sm" data-id='{{$p->id}}' data-estoque='{{$p->estoque}}' data-stoker='{{$p->estoque_minimo}}' data-valor="{{$p->valor}}" data-tipo="{{$p->tipo}}" data-nome="{{$p->nome}}" data-toggle="modal" data-target="#editModal"  data-keyboard="false"> Editar </button></td> 
                                          
                                          @can('isAdmin')  
                                              @if($p->ativo == 1)
@@ -73,7 +111,7 @@
                                        
                                          @endcan
                                    
-                                      <td><button class="btn btn-danger"> Excluir  </button></td>
+                                      <td><button class="btn btn-danger dlt_produto" value='{{$p->id}}'  > Excluir  </button></td>
                                     @endforeach
 
                                 </tbody>
@@ -89,62 +127,132 @@
         </div>
     </main>
 
-
-<!-- MODAL EDIT -->
-
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Editar produto</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="{{ route('produto_editar')}}" method="post">
-          @csrf
-          @include('forms/produto')
-
-          <div class="form-group">
-    <label for="produto_estoque"> Estoque da Loja: </label>
-    <input type="text" id="produto_estoque" class="form-control {{$errors->has('produto_estoque') ? 'is-invalid' : ''}}" name="produto_estoque" placeholder="Valor do produto" value="{{ old('produto_estoque') }}">
-    <input type="hidden" name="id_produto" id='id_produto' value="">
-       @if($errors->has('produto_estoque'))
-      <div class='invalid-feedback'>
-        {{$errors->first('produto_estoque')}}
-      </div>
-    @endif
-  </div>
-
-        <button type="submit" class="btn btn-primary">Salvar alterações</button>
-          
-        </form>
-         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-      </div>
-      <div class="modal-footer">
-        
-      </div>
-    </div>
-  </div>
-</div>
-<!-- END MODAL EDIT -->
-
 </body>
-
-<script>
-
-
-
-</script>
-
-
 
 <!-- Scripts -->
 
 
 <script>
-   
+
+
+      $("#select_pesquisa").change(function(){
+        
+        var value = $('#pesquisa_produto').val().toLowerCase()
+        if($('#select_pesquisa').val() == 1 ){         
+
+          $("#tabela_produtos tbody").find('.td_nome_produto').filter(function() {
+            $(this).parents('tr').toggle($(this).text().toLowerCase().indexOf(value) > -1)   
+          });
+
+        } else{
+           $("#tabela_produtos tbody").find('.td_tipo_produto').filter(function() {
+            $(this).parents('tr').toggle($(this).text().toLowerCase().indexOf(value) > -1)    
+
+          });
+
+        }
+
+      });
+
+     $("#pesquisa_produto").on("keyup", function() {    
+      var value = $(this).val().toLowerCase()
+      if($('#select_pesquisa').val() == 1){
+          $("#tabela_produtos tbody").find('.td_nome_produto').filter(function() {
+            $(this).parents('tr').toggle($(this).text().toLowerCase().indexOf(value) > -1)    
+
+          });
+
+      } else{
+
+         $("#tabela_produtos tbody").find('.td_tipo_produto').filter(function() {
+
+            $(this).parents('tr').toggle($(this).text().toLowerCase().indexOf(value) > -1)    
+
+          });
+
+      }
+        
+  
+  });
+
+
+  /* AJAX */
+
+  var _token = $('meta[name="_token"]').attr('content');
+
+           $('#edt_submit').click(function(e){
+               e.preventDefault();
+               
+               $.ajaxSetup({
+                        headers: {
+                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                             }
+                          });
+            
+               $.ajax({
+                  url: "{{ route('produto_editar') }}",
+                  method: 'POST',
+                  data: {
+                      id_produto: $("#id_produto").val(),
+                      produto_nome:  $('#produto_nome').val(),
+                      produto_tipo: $('#produto_tipo').val() ,
+                      produto_valor: $('#produto_valor').val() ,
+                      produto_estoque_minimo:  $('#produto_estoque_minimo').val(),
+                      produto_estoque:  $('#produto_estoque').val()
+                  }, 
+                  success: function(result){
+                    $("#editModal").modal('toggle')
+                     
+                  },
+                  error: function(result){
+                    var erou = "";
+                    $.each(result.responseJSON.errors, function(key,val){
+                        erou = erou + '\n' + val
+                    })     
+                    alert(erou)
+                    
+                  }
+                });
+               });
+
+
+
+
+
+
+
+ $('.dlt_produto').click(function(){
+
+          var r = confirm("Esta ação irá deletar todo o histórico do produto. Você realmente deseja excluir este produto?");
+
+          if (r == true) {
+           
+
+               $.ajaxSetup({
+                        headers: {
+                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                             }
+                          });
+            
+               $.ajax({
+                  url: "{{ route('produto_deletar') }}",
+                  method: 'POST',     
+                  data: {
+                    id: $(this).val()
+                  },           
+                  success: function(result){
+                    alert('Produto excluído com sucesso!')     
+                    location.reload();                 
+                  }
+                });
+
+            }
+               
+               });
+    
+
+
+  /* FINAL AJAX */
 
 $('#editModal').on('show.bs.modal', function (event) {
     
@@ -167,6 +275,57 @@ $('#editModal').on('show.bs.modal', function (event) {
 
 })
 
+
 </script>
 
 @endsection
+
+
+<!-- MODALS -->
+
+
+<!-- MODAL EDIT -->
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="titulo_produto" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titulo_produto">Editar produto</h5>
+
+        <button type="button"  data-dismiss="modal" class="close"  aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form  method="POST" id='frm_edt'>
+          
+          @include('forms/produto')
+
+          <div class="form-group">
+    <label for="produto_estoque"> Estoque da Loja: </label>
+    <input type="text" id="produto_estoque" class="form-control {{$errors->has('produto_estoque') ? 'is-invalid' : ''}}" name="produto_estoque" placeholder="Valor do produto" value="{{ old('produto_estoque') }}">
+    <input type="hidden" name="id_produto" id='id_produto' value="">
+       @if($errors->has('produto_estoque'))
+      <div class='invalid-feedback'>
+        {{$errors->first('produto_estoque')}}
+      </div>
+    @endif
+  </div>
+
+       
+          
+        </form>
+         <button id='edt_submit' class="btn btn-primary">Salvar alterações</button>
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
+      <div class="modal-footer">
+        
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END MODAL EDIT -->
+
+
+
+<!-- END MODALS -->

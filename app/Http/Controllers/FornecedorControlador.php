@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Fornecedores;
 use Gate;
+use Illuminate\Support\Facades\DB;
 class FornecedorControlador extends Controller
 {
    public function __construct()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Produto;
 use Gate;
+use Illuminate\Support\Facades\DB;
 class ProdutoControlador extends Controller
 {
 
@@ -146,7 +147,7 @@ class ProdutoControlador extends Controller
         $request->validate([
             'produto_nome' => 'required|unique:produtos,nome',
             'produto_valor' => 'required',
-            'produto_estoque_minimo' => 'required|numeric',
+            'produto_estoque_minimo' => 'required|numeric|min:0',
             'produto_tipo' => 'required|string'
         ], $mensagens);
 
@@ -199,33 +200,56 @@ class ProdutoControlador extends Controller
             if(!Gate::allows('isAdmin')){
             abort(404,'Você não tem acesso a esta funcionalidade');
         }
+         $produto = Produto::find($request->input('id_produto')); 
+
 
           $mensagens = [
-            'produto_nome.required' => 'O Nome é obrigatório',
             'produto_nome.unique' => 'Este produto já está cadastrado',
+            'produto_nome.required' => 'O Nome é obrigatório',            
             'produto_valor.required' => 'O valor é obrigatório',
-            'produto_estoque_minimo.required' => 'O estoque mínimo é obrigatório',
-            'produto_estoque_minimo.numeric' => 'O valor do estoque deve ser númerico',
             'produto_tipo.string' => 'O tipo não deve ser um valor númerico',
-            'produto_tipo.required' => 'O tipo do produto é obrigatório' 
+            'produto_tipo.required' => 'O tipo do produto é obrigatório',
+            'produto_estoque_minimo.required' => 'O estoque mínimo é obrigatório',
+            'produto_estoque_minimo.numeric' => 'O valor do estoque deve ser númerico',           
+            'produto_estoque_minimo.integer' => 'O valor para estoque mínimo deve ser um número inteiro',
+            'produto_estoque_minimo.min' => 'O estoque mínimo não pode ser negativo',
+            'produto_estoque.required' => 'O estoque mínimo é obrigatório',
+            'produto_estoque.numeric' => 'O valor do estoque deve ser númerico',           
+            'produto_estoque.integer' => 'O valor para estoque deve ser um número inteiro',
+            'produto_estoque.min' => 'O estoque não pode ser negativo'
 
-        ];
+        ];      
+
+            $validate =[  
+
+                'produto_nome' => 'required',            
+                'produto_valor' => 'required',            
+                'produto_estoque_minimo' => 'required|numeric|integer|',            
+                'produto_estoque' => 'required|numeric|integer|',            
+                'produto_tipo' => 'required|string'             
+                
+            ];
+
+         if($request->input('produto_nome') != $produto->nome){        
+            $validate['produto_nome'] = 'required|unique:produtos,nome';                    
         
-        $request->validate([
-            'produto_nome' => 'required|unique:produtos,nome',
-            'produto_valor' => 'required',
-            'produto_estoque_minimo' => 'required|numeric',
-            'produto_tipo' => 'required|string'
-        ], $mensagens);
+        }
 
+         if($request->input('produto_estoque_minimo') != $produto->estoque_minimo){        
+            $validate['produto_estoque_minimo'] = 'required|numeric|integer|min:0';                    
+        
+        }
 
-        $produto = Produto::find($request->input('id_produto'));          
-         $produto->nome = $request->input('produto_nome');
+         if($request->input('produto_estoque') != $produto->estoque){        
+            $validate['produto_estoque'] = 'required|numeric|integer|min:0';                    
+        
+        }                              
+
+        $request->validate($validate, $mensagens);                  
+        $produto->nome = $request->input('produto_nome');
         $produto->tipo = $request->input('produto_tipo');
-
-            $valor = str_replace(',','.',$request->input('produto_valor') );
+        $valor = str_replace(',','.',$request->input('produto_valor') );
         $produto->valor = $valor;     
-
         $produto->estoque_minimo = $request->input('produto_estoque_minimo');
         $produto->estoque =  $request->input('produto_estoque');
 
@@ -241,8 +265,18 @@ class ProdutoControlador extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request)
     {
-        //
+         if(!Gate::allows('isAdmin')){
+            abort(404,'Você não tem acesso a esta funcionalidade');
+        }
+       $produto = Produto::find($request->id);
+       $produto->delete();
+        
+        DB::table('produto_fornecedor')->where('produto', $request->id)->delete();
+
+        return redirect(route('produto_listar'));
+
+
     }
 }
