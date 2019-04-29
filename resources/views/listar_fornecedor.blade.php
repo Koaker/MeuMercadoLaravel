@@ -40,7 +40,7 @@
 
                                   <label for="pesquisa_fornecedor">Pesquisar por: </label>
                                  
-                                  <select id="select_pesquisa" class="form-control" style="width: 7%;">
+                                  <select id="select_pesquisa" class="form-control" style="width: 20%;">
                                     <option value='1' selected>Nome</option>                                   
                                   </select>                                       
                                   
@@ -93,9 +93,9 @@
 
                                         @can('isVendedor')
                                          @if($p->ativo == 1)
-                                             <td> <button class="btn btn-danger" value='{{$p->id}}'> Inativar </button> </td>                
+                                             <td> <button class="btn btn-danger" value='{{$p->id}}' disabled=""> Inativar </button> </td>                
                                              @else
-                                              <td> <button class="btn btn-success" > Ativar </button> </td>
+                                              <td> <button class="btn btn-success" disabled > Ativar </button> </td>
                                         @endif
                                         @endcan
 

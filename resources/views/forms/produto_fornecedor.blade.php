@@ -6,7 +6,9 @@
     <select class="form-control  {{$errors->has('pf_fornecedor') ? 'is-invalid' : '' }}" id='pf_fornecedor' name='pf_fornecedor' value="{{ old('pf_fornecedor') }}">
         <option hidden selected disabled>Selecine o fornecedor</option>
         @foreach ($fornecedores_select as $fornecedor)
+        @if($fornecedor->ativo != 0)
         <option value='{{$fornecedor->id}}'>{{$fornecedor->nome.' CNPJ:'. $fornecedor->cnpj }}</option>
+        @endif
         @endforeach
     </select>
 
@@ -25,7 +27,9 @@
     <select class="form-control {{$errors->has('pf_produto') ? 'is-invalid' : '' }}" id='pf_produto' name='pf_produto' value="{{ old('pf_produto') }}">
         <option hidden selected disabled>Selecine o produto</option>
         @foreach ($produtos_select as $produto)
+        @if($produto->ativo != 0)
         <option value='{{$produto->id}}'>{{$produto->nome }}</option>
+        @endif        
         @endforeach
     </select>
 

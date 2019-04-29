@@ -37,7 +37,7 @@ Route::post('/editarProduto', 'ProdutoControlador@update' )->name('produto_edita
 Route::get('/statusProduto/{id}', 'ProdutoControlador@status' )->name('produto_status');
 Route::post('/deletarProduto', 'ProdutoControlador@delete' )->name('produto_deletar');
 /*FINAL PRODUTO*/
-
+Route::get('/listarMaisVendidos', 'ProdutoControlador@ordenaValor' )->name('ordenaValor');
 
 /*FORNECEDOR*/
 Route::get('/cadastrarFornecedor', 'FornecedorControlador@create')->name('fornecedor_cadastro');
@@ -55,6 +55,9 @@ Route::get('/cadastrarProdutoFornecedor', 'produtoFornecedorControlador@create')
 Route::get('/listarProdutoFornecedor', 'produtoFornecedorControlador@index' )->name('produtofornecedor_listar');
 Route::post('/salvarProdutoFornecedor', 'produtoFornecedorControlador@store' )->name('produtofornecedor_salvar');
 Route::post('/addEstoqueEntrada', 'produtoFornecedorControlador@addEntrada' )->name('produtofornecedor_estoque');
+Route::post('/editarProdutoFornecedor', 'produtoFornecedorControlador@update' )->name('produtofornecedor_editar');
+
+Route::get('/dltProdutoFornecedor', 'produtoFornecedorControlador@destroy' )->name('produtofornecedor_dlt');
 
 
 

@@ -58,7 +58,7 @@
                         <!-- FINAL VENDAS-->
 
                         <!-- USUÁRIOS -->
-                        <div class='row'>
+                      <!--   <div class='row'>
                             <div class='col-md-6 mt-5'>
                                 <button style="width: 100%;"style="width: 100%;" type="button" class="btn btn-raised btn-dark">Cadastro de usuários</button>
                             </div>     
@@ -68,6 +68,6 @@
                             </div>                       
 
                                           
-                        </div> 
+                        </div>  -->
 
                         <!-- FINAL USUÁRIO -->

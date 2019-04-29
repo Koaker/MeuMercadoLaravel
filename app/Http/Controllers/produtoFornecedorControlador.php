@@ -53,7 +53,7 @@ class produtoFornecedorControlador extends Controller
         $produtoFornecedor = DB::table('produto_fornecedor')
             ->join('produtos', 'produtos.id', '=', 'produto_fornecedor.produto')
             ->join('fornecedores', 'fornecedores.id', '=', 'produto_fornecedor.fornecedor')
-            ->select('produtos.nome as p_nome', 'fornecedores.nome as f_nome', 'produto_fornecedor.estoque_minimo' , 'produto_fornecedor.estoque_entrada' , 'produto_fornecedor.id', 'produtos.estoque','produtos.estoque_minimo as p_minim')
+            ->select('produto_fornecedor.produto as produto_id', 'produto_fornecedor.fornecedor as fornecedor_id', 'produtos.nome as p_nome', 'fornecedores.nome as f_nome', 'produto_fornecedor.estoque_minimo' , 'produtos.estoque_entrada' , 'produto_fornecedor.id', 'produtos.estoque','produtos.estoque_minimo as p_minim')
             ->get();
         return view('listar_fornecedor_produto', compact('produtoFornecedor'));
     }
@@ -142,8 +142,6 @@ class produtoFornecedorControlador extends Controller
                 throw $error;
             }
 
-
-            
             $produtoFornecedor->save();                        
             $produto->estoque_entrada += $request->input('pf_estoque_entrada');
             $produto->estoque = $produto->estoque + $produtoFornecedor->estoque_entrada;
@@ -168,7 +166,7 @@ class produtoFornecedorControlador extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -189,9 +187,59 @@ class produtoFornecedorControlador extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+
+       $produtoFornecedor = produtoFornecedor::find($request->id);
+       $produto = Produto::find($produtoFornecedor->produto);
+
+         $mensagens = [
+            'pf_estoque_minimo.required' => 'O estoque mínimo é obrigatório',
+            'pf_estoque_entrada.required' => 'O estoque de entrada é obrigatório',
+            'pf_estoque_minimo.numeric' => 'O valor do estoque deve ser númerico',        
+            'pf_estoque_entrada.numeric' => 'O valor do estoque deve ser númerico', 
+            'pf_estoque_entrada.min' => 'O valor não pode ser negativo',
+            'pf_estoque_minimo.min' => 'O valor não pode ser negativo',
+            'pf_fornecedor.required' => 'É obrigatório selecionar um fornecedor',
+            'pf_produto.required' => 'É obrigatório selecionar um produto',
+
+        ];      
+
+            $validate =[  
+                'min' => 'required|numeric|min:0',                
+                'produto' => 'required',
+                'fornecedor' => 'required'
+                
+            ];
+       
+
+         $request->validate($validate, $mensagens);      
+       
+
+        if($produtoFornecedor->produto != $request->input('produto') ||  $produtoFornecedor->fornecedor != $request->input('fornecedor')){
+
+            $produtoFornecedor->produto = $request->input('produto');
+            $produtoFornecedor->fornecedor = $request->input('fornecedor');
+
+        $matchThese = ['produto_fornecedor.produto' => $produtoFornecedor->produto, 'produto_fornecedor.fornecedor' => $produtoFornecedor->fornecedor];
+
+        $validacao = DB::table('produto_fornecedor')->select('produto_fornecedor.produto,produto_fornecedor.fornecedor')
+        ->where($matchThese)       
+        ->count();    
+
+         if($validacao > 0) {           
+            return response()->json(['error' => '0']);         
+        }    
+
+        }
+
+        $produtoFornecedor->produto = $request->input('produto');
+        $produtoFornecedor->fornecedor = $request->input('fornecedor');
+        $produtoFornecedor->estoque_minimo = $request->input('min');
+        $produtoFornecedor->save();
+
+          return response()->json(['sucesso' => '1']);   
+       
     }
 
     /**
@@ -200,8 +248,16 @@ class produtoFornecedorControlador extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+          if(!Gate::allows('isAdmin')){
+            abort(404,'Você não tem acesso a esta funcionalidade');
+        }
+       $produto = produtoFornecedor::find($request->id);
+       $produto->delete();      
+     
+
+        return redirect(route('produtofornecedor_listar'));
+
     }
 }

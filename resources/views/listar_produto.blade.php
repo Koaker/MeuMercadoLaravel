@@ -31,12 +31,11 @@
                             <div class="row"> 
                                 <div class="col-md-12">
 
-
                                 <div class="form-group">
 
                                   <label for="pesquisa_produto">Pesquisar por: </label>
                                  
-                                  <select id="select_pesquisa" class="form-control" style="width: 7%;">
+                                  <select id="select_pesquisa" class="form-control" style="width: 20%;">
                                     <option value='1' selected>Nome</option>
                                     <option value='2'>Tipo</option>
                                   </select>                                       
@@ -89,18 +88,22 @@
                                         <td>{{$p->estoque}}</td>
                                         <td>{{$p->estoque_minimo}}</td>
                                        
-                                        <td><button class="btn btn-primary shadow-sm" data-id='{{$p->id}}' data-estoque='{{$p->estoque}}' data-stoker='{{$p->estoque_minimo}}' data-valor="{{$p->valor}}" data-tipo="{{$p->tipo}}" data-nome="{{$p->nome}}" data-toggle="modal" data-target="#editModal"  data-keyboard="false"> Editar </button></td> 
+                                      
                                          
                                          @can('isAdmin')  
+                                           <td><button class="btn btn-primary shadow-sm" data-id='{{$p->id}}' data-estoque='{{$p->estoque}}' data-stoker='{{$p->estoque_minimo}}' data-valor="{{$p->valor}}" data-tipo="{{$p->tipo}}" data-nome="{{$p->nome}}" data-toggle="modal" data-target="#editModal"  data-keyboard="false"> Editar </button></td> 
                                              @if($p->ativo == 1)
                                              <td><a href="{{ route('produto_status', $p->id) }}"> <button class="btn btn-danger" value='{{$p->id}}'> Inativar </button> </a></td>                             
                                              @else
-                                              <td><a href="{{ route('produto_status', $p->id)  }}"> <button class="btn btn-success" > Ativar </button> </a></td>                                              
-                                             @endif                                              
+                                              <td><a href="{{ route('produto_status', $p->id)  }}"> <button class="btn btn-success" > Ativar </button> </a></td> 
+                                                                                         
+                                             @endif    
+                                             <td><button class="btn btn-danger dlt_produto" value='{{$p->id}}'  > Excluir  </button></td>                                            
                                         @endcan
 
 
                                          @can('isVendedor') 
+                                         <td><button class="btn btn-primary shadow-sm" disabled=""> Editar </button></td> 
                                             @if($p->ativo == 1)
                                                <td><button class="btn btn-danger" disabled > Inativar </button></td>
                                                      
@@ -109,10 +112,10 @@
                                                </tr> <td><button class="btn btn-success" disabled > Ativar </button></td>
                                               
                                              @endif  
-                                       
-                                         @endcan
+                                        <td><button class="btn btn-danger" disabled > Excluir  </button></td
+>                                         @endcan
                                    
-                                      <td><button class="btn btn-danger dlt_produto" value='{{$p->id}}'  > Excluir  </button></td>
+                                      
                                     @endforeach
 
                                 </tbody>

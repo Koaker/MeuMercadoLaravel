@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@include('global.notifications')
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 
@@ -9,6 +10,21 @@
  
   <meta name="csrf-token" content="{{ csrf_token()}}">
 </head>
+
+
+if ($errors->any())
+    <div class="alert alert-danger">
+        @foreach($errors->all('<p>:message</p>') as $error)
+            {{ $error }}
+        @endforeach
+    </div>
+@endif
+
+@if (Session::has('success'))
+    <div class="alert alert-success">
+        <p>{{ Session::get('success') }}</p>
+    </div>
+@endif
 
 <body>
     <main>
@@ -30,8 +46,7 @@
                                     <th> Tipo    </th>
                                     <th> Valor R$  </th>                                    
                                     <th> Vendas  </th>
-                                    <th> Estoque Loja </th>
-                                    <th> Estoque Mínimo </th>
+                                    <th> Estoque Loja </th>                                  
                                     <th> Editar </th>                                   
                                     <th> Inativar </th>
                                     <th> Excluir </th>
@@ -47,8 +62,7 @@
                                         <td>{{$p->tipo}}</td>
                                         <td>{{$p->valor}}</td>       
                                         <td>{{$p->vendas}}</td>
-                                        <td>{{$p->estoque}}</td>
-                                        <td>{{$p->estoque_minimo}}</td>
+                                        <td>{{$p->estoque}}</td>                                        
                                         <td><button class="btn btn-primary shadow-sm" data-valor ="{{$p->valor}}" data-tipo="{{$p->tipo}}" data-nome="{{$p->nome}}" data-toggle="modal" data-target="#editModal"> Editar </button></td>                                        
                                         <td><button class="btn btn-danger" > Inativar </button></td>
                                         <td><button class="btn btn-danger"> Excluir  </button></td>

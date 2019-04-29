@@ -23,6 +23,7 @@ class ProdutoControlador extends Controller
      * 
      */
 
+
     public function status(Request $request){
 
           if(!Gate::allows('isAdmin')){
@@ -48,24 +49,20 @@ class ProdutoControlador extends Controller
             abort(404,'Você não tem acesso a esta funcionalidade');
         }
 
-        $produto = Produto::find($request->input('id_produto'));
-        $produto_cancelado = $request->input('venda_quantidade_cancelada');    
+
+
+        $produto = Produto::find($request->input('id'));
+       
+        $produto_cancelado = $request->input('quantidade'); 
+
+
+         if($produto_cancelado == "")
+            return response()->json(['error' => '1']);
         
-          if($produto->vendas < $produto_cancelado){
-            $produto_cancelado = $produto->vendas;   
-         }
-         
-        if($produto->vendas != 0) {
-            
-            $produto->vendas -= $produto_cancelado;
-            
-        } else if ($produto->vendas <= 0) {
-            
-            $produto->vendas = 0;
-            
-            return redirect()->back()->with('venda_zerada','O produto já está com a venda zerada');
-        }          
-        
+        if($produto_cancelado > $produto->vendas)
+            return response()->json(['error' => '0']);
+
+        $produto->vendas -= $produto_cancelado;
 
         if($produto->vendas < 0) {
             $produto->vendas = 0;
@@ -75,7 +72,7 @@ class ProdutoControlador extends Controller
 
         $produto->save();
 
-        return redirect(route('venda_listar'));
+        return response()->json(['sucesso' => '1']);
     }
 
      public function efetuar_venda(Request $request){

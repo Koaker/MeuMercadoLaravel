@@ -38,17 +38,18 @@
 
                                 <div class="form-group">
 
-                                  <label for="pesquisa_fornecedor">Pesquisar por: </label>
+                                  <label for="select_pesquisa2">Pesquisar por: </label>
                                  
-                                  <select id="select_pesquisa" class="form-control" style="width: 7%;">
-                                    <option value='1' selected>Nome</option>                                   
+                                  <select id="select_pesquisa2" class="form-control" style="width: 20%;">
+                                    <option value='1' selected>Nome</option>   
+                                    <option value='2' >Fornecedor</option>                                 
                                   </select>                                       
                                   
                                 </div>
 
                                 <div class="form-group" style="width: 40%;">      
 
-                                  <input type="text" id="pesquisa_fornecedor" class="form-control" placeholder="Pesquise aqui">
+                                  <input type="text" id="pesquisa_pf" class="form-control" placeholder="Pesquise aqui">
 
                                 </div>
                                 
@@ -60,7 +61,7 @@
                         </div>
 
                         <div class="card-body">
-                            <table class="table table-bordered table-hover" id="tabela_produtos">
+                            <table class="table table-bordered table-hover" id="tabela_pf">
                                 <thead>
                                     <th> Código  </th>
                                     <th> Produto    </th>
@@ -79,26 +80,26 @@
                                     @foreach($produtoFornecedor as $p)
                                     <tr>
                                         <td>{{$p->id}}</td>
-                                        <td>{{$p->p_nome}}</td>
-                                        <td>{{$p->f_nome}}</td>
+                                        <td class="td_nome_produto">{{$p->p_nome}}</td>
+                                        <td class="td_nome_fornecedor">{{$p->f_nome}}</td>
                                         <td>{{$p->estoque_minimo}}</td>
                                         <td>{{$p->estoque_entrada}}</td>
                                         <td>{{$p->estoque}}</td>
                                          <td>{{$p->p_minim}}</td>                                        
                                                                         
-                                        <td><button class="btn btn-primary shadow-sm" >Editar</button></td>  
+                                        <td><button class="btn btn-primary shadow-sm" data-id='{{$p->id}}' data-produto='{{ $p->produto_id }}' data-fornecedor='{{$p->fornecedor_id}}'  data-min='{{$p->estoque_minimo}}' data-target='#editPF' data-toggle="modal" data-keyboard="false">Editar</button></td>  
                                         @can('isAdmin')                                     
                                          <td>
                                           <button class="btn btn-success" data-target='#addEstoqueModal' data-id='{{$p->id}}'data-toggle="modal" data-keyboard="false" > 
                                           Adicionar estoque entrada 
                                           </button>
                                         </td>
-                                        <td><button class="btn btn-danger" > Excluir </button></td>
+                                        <td><button class="btn btn-danger dlt_produto" value="{{$p->id}}" > Excluir </button></td>
                                         @endcan
 
                                          @can('isVendedor')                                     
                                         <td>
-                                          <button class="btn btn-success" data-target='#addEstoqueModal' data-id='{{$p->id}}'data-toggle="modal" data-keyboard="false" > 
+                                          <button class="btn btn-success" data-target='#addEstoqueModal' data-id='{{$p->id}}' data-toggle="modal" data-keyboard="false" > 
                                           Adicionar estoque entrada 
                                           </button>
                                         </td>
@@ -125,14 +126,6 @@
 
 </body>
 
-<script>
-
-
-
-</script>
-
-
-
 <!-- Scripts -->
 
 
@@ -141,6 +134,67 @@
  
 
   $(document).ready(function(){
+
+        /* ~ PESQUISA */
+
+        $("#select_pesquisa2").change(function(){
+          console.log('entrou change')
+          var value = $('#pesquisa_pf').val().toLowerCase()
+          if($('#select_pesquisa2').val() == 1 ){         
+
+            $("#tabela_pf tbody").find('.td_nome_produto').filter(function() {
+              $(this).parents('tr').toggle($(this).text().toLowerCase().indexOf(value) > -1)   
+            });
+
+          } else{
+             $("#tabela_pf tbody").find('.td_nome_fornecedor').filter(function() {
+              $(this).parents('tr').toggle($(this).text().toLowerCase().indexOf(value) > -1)    
+
+            });
+
+          }
+
+        });
+
+       $("#pesquisa_pf").on("keyup", function() {  
+       console.log('entrou keyup')  
+        var value = $(this).val().toLowerCase()
+        if($('#select_pesquisa2').val() == 1){
+            $("#tabela_pf tbody").find('.td_nome_produto').filter(function() {
+              $(this).parents('tr').toggle($(this).text().toLowerCase().indexOf(value) > -1)    
+
+            });
+
+        } else{
+
+           $("#tabela_pf tbody").find('.td_nome_fornecedor').filter(function() {
+
+              $(this).parents('tr').toggle($(this).text().toLowerCase().indexOf(value) > -1)    
+
+            });
+
+        }       
+    
+    });
+
+     /* ~ FINAL PESQUISA */
+
+    $('#pf_estoque_minimo').mask('0000000000000' , {reverse: true});
+  $('#editPF').on('show.bs.modal', function (event) {  
+
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var id = button.data('id') 
+  var produto = button.data('produto') 
+  var fornecedor = button.data('fornecedor') 
+  var min = button.data('min') 
+    
+  var modal = $(this)  
+  modal.find('.modal-title').text('Edição produto x fornecedor')
+  modal.find('.modal-body #pf_fornecedor').val(fornecedor)
+  modal.find('.modal-body #pf_produto').val(produto)
+  modal.find('.modal-body #pf_estoque_minimo').val(min)
+  modal.find('.modal-body #id_produto_edt').val(id)
+})
 
     /* MASKS */
      $('#adicionar_estoque').mask('00000000000000', {reverse: true});
@@ -204,6 +258,85 @@
                   }
                 })
                });
+              
+
+            $('#send_edit').click(function(e){
+               e.preventDefault();
+               
+               $.ajaxSetup({
+                        headers: {
+                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                             }
+                          });
+            
+               $.ajax({
+                  url: "{{ route('produtofornecedor_editar') }}",
+                  method: 'POST',
+                  dataType: "json",
+                  data: {
+                      id: $("#id_produto_edt").val(),
+                      fornecedor: $("#pf_fornecedor").val(),
+                      produto: $("#pf_produto").val(),
+                      min: $("#pf_estoque_minimo").val()
+          
+                  }, 
+                  success: function(result){
+                    console.log(result)
+
+                    if(result.error == '0'){
+                      alert('Já existe uma assosiação para este produto e este forencedor') 
+                    } 
+                    
+                    if(result.sucesso == '1'){
+                      alert('Dados alterados com sucesso!')
+                       $("#editPF").modal('toggle')
+                       location.reload();
+                    }                            
+                    
+
+                     
+                  },
+                  error: function(result){      
+                  console.log(result)             
+                    alert(result)
+                    
+                  }
+                })
+               });
+
+
+
+
+
+ $('.dlt_produto').click(function(){
+
+          var r = confirm("Dados poderão ser perdidos com esta ação. Você realmente deseja excluir esta assosiação? ");
+
+          if (r == true) {
+           
+
+               $.ajaxSetup({
+                        headers: {
+                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                             }
+                          });
+            
+               $.ajax({
+                  url: "{{ route('produtofornecedor_dlt') }}",
+                  method: 'GET',     
+                  data: {
+                    id: $(this).val()
+                  },           
+                  success: function(result){
+                    alert('Produto excluído com sucesso!')     
+                    location.reload();                 
+                  }
+                });
+
+            }
+               
+               });
+
 
             /* END AJAX*/
 
@@ -253,7 +386,7 @@
 
 <!-- MODAL EDIT -->
 
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editarproduto_fornecedor" aria-hidden="true">
+<div class="modal fade" id="editPF" tabindex="-1" role="dialog" aria-labelledby="editarproduto_fornecedor" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -263,11 +396,71 @@
         </button>
       </div>
       <div class="modal-body">
-      @include('forms/produto')
+           
+        <div class="form-group">
+
+
+    <label for="pf_fornecedor"> Fornecedor:  </label>
+
+    <select class="form-control  {{$errors->has('pf_fornecedor') ? 'is-invalid' : '' }}" id='pf_fornecedor' name='pf_fornecedor' value="{{ old('pf_fornecedor') }}">
+        <option hidden selected disabled>Selecine o fornecedor</option>
+        @foreach ($fornecedores_select as $fornecedor)
+        @if($fornecedor->ativo != 0)
+          <option value='{{$fornecedor->id}}'>{{$fornecedor->nome.' CNPJ:'. $fornecedor->cnpj }}</option>
+        @endif
+
+        @endforeach
+    </select>
+
+       @if($errors->has('pf_fornecedor'))
+        <div class='invalid-feedback'>
+        
+            {{$errors->first('pf_fornecedor')}}
+        </div>
+    @endif
+
+</div>
+
+
+<div class="form-group">
+    <label for="pf_produto"> Produto:  </label>
+
+    <select class="form-control {{$errors->has('pf_produto') ? 'is-invalid' : '' }}" id='pf_produto' name='pf_produto' value="{{ old('pf_produto') }}">
+        <option hidden selected disabled>Selecine o produto</option>
+        @foreach ($produtos_select as $produto)
+          @if($produto->ativo != 0)
+             <option value='{{$produto->id}}'>{{$produto->nome }}</option>
+          @endif 
+       
+        @endforeach
+    </select>
+
+
+     @if($errors->has('pf_produto'))
+        <div class='invalid-feedback'>
+            {{$errors->first('pf_produto')}}
+        </div>
+    @endif
+
+</div>
+
+<div class="form-group">
+    <label for="pf_estoque_minimo"> Estoque mínimo:  </label>
+    <input type="text" id="pf_estoque_minimo" class="form-control {{$errors->has('pf_estoque_minimo') ? 'is-invalid' : ''}}" name="pf_estoque_minimo" placeholder="estoque mínimo a se adquirir" value="{{ old('pf_estoque_minimo') }}">
+
+     @if($errors->has('pf_estoque_minimo'))
+        <div class='invalid-feedback'>
+            {{$errors->first('pf_estoque_minimo')}}
+        </div>
+    @endif
+</div>
+
+        <input type="hidden" name="id_produto_edt" id='id_produto_edt' value="">
+      
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button id="send_edit" type="button" class="btn btn-primary">Salvar alterações</button>
       </div>
     </div>
   </div>

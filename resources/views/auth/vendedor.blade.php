@@ -26,10 +26,7 @@
 
                         <!-- PRODUTO E FORNECEDOR -->
                         <div class='row'>
-                            <div class='col-md-6 mt-5'>
-                                <a href="{{ route('produtofornecedor_cadastro') }} "><button style="width: 100%;"style="width: 100%;" type="button" class="btn btn-raised btn-dark">Cadastro Produto/Fornecedor</button></a>
-                            </div>     
-
+                           
                              <div class="col-md-6 mt-5">
                                 <a href="{{ route('produtofornecedor_listar') }} "><button style="width: 100%;" type="button" class="btn btn-raised btn-dark">Lista de Produto/Fornecedor</button> </a>
                             </div>                       

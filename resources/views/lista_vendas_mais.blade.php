@@ -32,11 +32,10 @@
                                  
                                   <select id="select_pesquisa2" class="form-control" style="width: 20%;">
                                     <option value='1' selected>Mais vendidos</option>   
-                                    <option value='2' >Menos vendidos</option>  
+                                    <option value='2' >Menos venvidos</option>  
                                     <option value='3' >Estoque positivo</option>   
                                     <option value='4' >Estoque negativo</option>   
-                                    <option value='5' >Estoque zerado</option>
-                                    <option value='6'> Todos </option>                                 
+                                    <option value='5' >Estoque zerado</option>                                  
                                   </select>                                       
                                   
                                 </div>
@@ -187,11 +186,11 @@
    
 $(document).ready(function(){
 
+
 function sortTable(table, order) {
-  console.log('oi')
     var asc   = order === 'asc',
         tbody = table.find('tbody');
-        $("#tabela_venda tbody tr").show()
+
     tbody.find('tr').sort(function(a, b) {
         if (asc) {
             return $('.td_vendas', a).text().localeCompare($('.td_vendas', b).text());
@@ -201,25 +200,22 @@ function sortTable(table, order) {
     }).appendTo(tbody);
 }
 
-
-             
-
-
-
         /* ~ PESQUISA */
 
-        $("#select_pesquisa2").change(function(){
-          $("#tabela_venda").children().removeClass('ativo')
+        $("#select_pesquisa2").change(function(){          
           
           var valor_select = $('#select_pesquisa2').val()
 
-          if( valor_select == 1 ){             
-          sortTable($('#tabela_venda'),'desc') 
+          if( valor_select == 1 ){   
 
+              sortTable($('#tabela_venda'),'asc');
 
-           } else if(valor_select == 2){
-            sortTable($('#tabela_venda'),'asc');
-             ;
+           
+          } else if(valor_select == 2){
+             $("#tabela_venda tbody").find('.td_estoque').filter(function() {
+              $(this).parents('tr').toggle($(this).text().toLowerCase() > 0 )    
+
+            });
 
           } else if(valor_select == 3){
                $("#tabela_venda tbody").find('.td_estoque').filter(function() {
@@ -240,14 +236,12 @@ function sortTable(table, order) {
 
             });
 
-            } else if(valor_select == 6){
-              location.reload();
             }
 
         });
 
        $("#pesquisa_vendas").on("keyup", function() {  
-      
+       console.log('entrou keyup')  
         var value = $(this).val().toLowerCase()
        
             $("#tabela_venda tbody").find('.td_nome').filter(function() {
