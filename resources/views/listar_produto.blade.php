@@ -93,9 +93,9 @@
                                          
                                          @can('isAdmin')  
                                              @if($p->ativo == 1)
-                                             <td><a href="{{ route('fornecedor_status', $p->id) }}"> <button class="btn btn-danger" value='{{$p->id}}'> Inativar </button> </a></td>                             
+                                             <td><a href="{{ route('produto_status', $p->id) }}"> <button class="btn btn-danger" value='{{$p->id}}'> Inativar </button> </a></td>                             
                                              @else
-                                              <td><a href="{{ route('fornecedor_status', $p->id)  }}"> <button class="btn btn-success" > Ativar </button> </a></td>                                              
+                                              <td><a href="{{ route('produto_status', $p->id)  }}"> <button class="btn btn-success" > Ativar </button> </a></td>                                              
                                              @endif                                              
                                         @endcan
 

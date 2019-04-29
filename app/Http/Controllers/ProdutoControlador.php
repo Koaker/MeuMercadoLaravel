@@ -160,6 +160,7 @@ class ProdutoControlador extends Controller
         $produto->estoque = 0;
         $produto->ativo = 1;
         $produto->vendas = 0;
+        $produto->estoque_entrada = 0;
         $produto->save();
 
         return redirect(route('produto_listar'));
@@ -245,7 +246,9 @@ class ProdutoControlador extends Controller
         
         }                              
 
-        $request->validate($validate, $mensagens);                  
+        $request->validate($validate, $mensagens);  
+
+                        
         $produto->nome = $request->input('produto_nome');
         $produto->tipo = $request->input('produto_tipo');
         $valor = str_replace(',','.',$request->input('produto_valor') );

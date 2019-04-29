@@ -3,7 +3,7 @@
 
 @section('content')
 <head>
-  <title> Cadastro de fornecedor </title>
+  <title> Cadastro de fornecedor ao produto</title>
    <meta name="csrf-token" content="{{ csrf_token()}}">
 </head>
 
@@ -15,7 +15,7 @@
                     <div class="card border">
                         <div class="card-header">
                            <div class="card-title">
-                           Cadastrar fornecedor
+                           Cadastro de fornecedor ao produto
                             </div>
                         </div>
 
@@ -39,11 +39,10 @@
             </div>
         </div>
     </main>
-
-    @if(isset($errors))
+    
+ @if(isset($errors))
         {{ var_dump($errors) }}
     @endif
-
 
 </body>
 

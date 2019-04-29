@@ -54,6 +54,7 @@ Route::get('/statusFornecedor/{id}', 'FornecedorControlador@status' )->name('for
 Route::get('/cadastrarProdutoFornecedor', 'produtoFornecedorControlador@create')->name('produtofornecedor_cadastro');
 Route::get('/listarProdutoFornecedor', 'produtoFornecedorControlador@index' )->name('produtofornecedor_listar');
 Route::post('/salvarProdutoFornecedor', 'produtoFornecedorControlador@store' )->name('produtofornecedor_salvar');
+Route::post('/addEstoqueEntrada', 'produtoFornecedorControlador@addEntrada' )->name('produtofornecedor_estoque');
 
 
 
