@@ -21,10 +21,11 @@
                            Lista de produtos
                             </div>
                                 <div class='row'>
+                                  @can('isAdmin') 
                                   <div class='col-md-5'>
                                        <a href="{{route('produto_cadastro')}}"><button class="btn btn-success">Adicionar Produto</button></a>
                                   </div>
-                                 
+                                 @endcan
                                 </div>
                             
                             <div class="row"> 
@@ -66,7 +67,7 @@
                                     <th> Tipo    </th>
                                     <th> Valor R$  </th>                                    
                                     <th> Vendas  </th>
-                                    <th> Estoque de Entrada </th>
+                                    <th> Estoque de Entrada total</th>
                                     <th> Estoque Loja </th>
                                     <th> Estoque Mínimo </th>
                                     <th> Editar </th>                                   
@@ -92,9 +93,9 @@
                                          
                                          @can('isAdmin')  
                                              @if($p->ativo == 1)
-                                             <td><a href="{{ route('produto_status', $p->id) }}"> <button class="btn btn-danger" value='{{$p->id}}'> Inativar </button> </a></td>                             
+                                             <td><a href="{{ route('fornecedor_status', $p->id) }}"> <button class="btn btn-danger" value='{{$p->id}}'> Inativar </button> </a></td>                             
                                              @else
-                                              <td><a href="{{ route('produto_status', $p->id)  }}"> <button class="btn btn-success" > Ativar </button> </a></td>                                              
+                                              <td><a href="{{ route('fornecedor_status', $p->id)  }}"> <button class="btn btn-success" > Ativar </button> </a></td>                                              
                                              @endif                                              
                                         @endcan
 
@@ -134,6 +135,7 @@
 
 <script>
 
+      /* ~ PESQUISA */
 
       $("#select_pesquisa").change(function(){
         
@@ -170,11 +172,11 @@
 
           });
 
-      }
-        
+      }       
   
   });
 
+  /* ~ FINAL PESQUISA */
 
   /* AJAX */
 
@@ -201,7 +203,10 @@
                       produto_estoque:  $('#produto_estoque').val()
                   }, 
                   success: function(result){
-                    $("#editModal").modal('toggle')
+                     alert('Produto alterado com sucesso!')                    
+                     $("#editModal").modal('toggle')
+                      location.reload();
+
                      
                   },
                   error: function(result){
@@ -275,6 +280,11 @@ $('#editModal').on('show.bs.modal', function (event) {
 
 })
 
+// MASK
+$('#produto_valor').mask('000.000.000.000.000,00', {reverse: true});
+$('#produto_estoque').mask('0000000000000' , {reverse: true});
+$('#produto_estoque_minimo').mask('0000000000000' , {reverse: true});
+//  FINAL MASK
 
 </script>
 

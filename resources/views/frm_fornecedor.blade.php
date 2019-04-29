@@ -40,14 +40,37 @@
         </div>
     </main>
 
-    @if(isset($errors))
-        {{ var_dump($errors) }}
-    @endif
-
-
 </body>
 
 <script> 
+  var fornecedor = $("#fornecedor_estado").data('valor');
+
+  console.log(fornecedor)
+
+      $.getJSON( "https://api.myjson.com/bins/786c4", function( data ) {
+     console.log(data)
+      
+      var estados = [];
+      
+      estados.push("<option selected disabled hidden> Selecione um estado </option>") 
+
+          $.each( data.UF, function( key, val ) {        
+            
+            estados.push( "<option value='" + data.UF[key].sigla + "'>" +  data.UF[key].sigla  + "</option>" );
+          });        
+
+          $('#fornecedor_estado').append(estados)
+          if(fornecedor != "")
+          $('#fornecedor_estado').val(fornecedor);
+                    
+         
+  });         
+           
+      
+
+
+
+
 $('#fornecedor_cnpj').mask('00.000.000/0000-00', {reverse: true});
 
 </script>

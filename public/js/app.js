@@ -36694,3 +36694,4 @@ module.exports = __webpack_require__(/*! D:\Projetos\laravel\MeuMercado\resource
 /***/ })
 
 /******/ });
+

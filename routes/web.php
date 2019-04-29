@@ -21,6 +21,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+/* GET ESTADOS JSON HEHE */
+
+
+/* FINAL ESTADOS JSON
+
+
+
+
 /* PRODUTO */
 Route::get('/cadastrarProdutos', 'ProdutoControlador@create' )->name('produto_cadastro');
 Route::get('/listarProdutos', 'ProdutoControlador@index' )->name('produto_listar');
@@ -35,6 +43,9 @@ Route::post('/deletarProduto', 'ProdutoControlador@delete' )->name('produto_dele
 Route::get('/cadastrarFornecedor', 'FornecedorControlador@create')->name('fornecedor_cadastro');
 Route::get('/listarFornecedor', 'FornecedorControlador@index' )->name('fornecedor_listar');
 Route::post('/salvarFornecedor', 'FornecedorControlador@store' )->name('fornecedor_salvar');
+Route::post('/editarFornecedor', 'FornecedorControlador@update' )->name('fornecedor_editar');
+Route::get('/statusFornecedor/{id}', 'FornecedorControlador@status' )->name('fornecedor_status');
+
 /*FINAL FORNECEDOR*/
 
 

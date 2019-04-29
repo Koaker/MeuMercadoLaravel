@@ -224,7 +224,7 @@ class ProdutoControlador extends Controller
 
                 'produto_nome' => 'required',            
                 'produto_valor' => 'required',            
-                'produto_estoque_minimo' => 'required|numeric|integer|',            
+                'produto_estoque_minimo' => 'required|numeric',            
                 'produto_estoque' => 'required|numeric|integer|',            
                 'produto_tipo' => 'required|string'             
                 
@@ -236,7 +236,7 @@ class ProdutoControlador extends Controller
         }
 
          if($request->input('produto_estoque_minimo') != $produto->estoque_minimo){        
-            $validate['produto_estoque_minimo'] = 'required|numeric|integer|min:0';                    
+            $validate['produto_estoque_minimo'] = 'required|numeric|min:0';                    
         
         }
 
