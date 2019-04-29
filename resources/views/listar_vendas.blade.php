@@ -42,7 +42,7 @@
                                 </div>
 
                                 <div class="form-group" style="width: 40%;">      
-
+                                    <label class="form-group"> Pesquisar  apenas por nome </label> 
                                   <input type="text" id="pesquisa_vendas" class="form-control" placeholder="Pesquise aqui">
 
                                 </div>
