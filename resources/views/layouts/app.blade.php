@@ -36,9 +36,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <a  style='color:aliceblue;' href="https://www.fadergs.edu.br/" target="_blank"> <small> @Fadergs </small> </a>
-                    </ul>
+                        <a  style='color:aliceblue;' href="" target="_blank"> <small> @Fadergs </small> </a>
 
+                    </ul>
+                    <a  style='color:aliceblue;' href="/guide" target="_blank"> <small> @Guia </small> </a>
+                    
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->

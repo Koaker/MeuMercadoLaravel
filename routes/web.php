@@ -16,6 +16,12 @@ Route::get('/', function () {
 });
 
 
+Route::get('/guide', function () {
+    return view('/layouts/guia');
+});
+
+
+
 
 Auth::routes();
 
