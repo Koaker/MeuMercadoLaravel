@@ -328,6 +328,10 @@ $('#cancelarVenda').on('show.bs.modal', function (event) {
 
 
 
+$('#venda_quantidade_cancelada').mask('0000000000000' , {reverse: true});
+$('#venda_quantidade').mask('0000000000000' , {reverse: true});
+
+
 
 
 </script>
