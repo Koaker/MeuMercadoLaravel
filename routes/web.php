@@ -33,7 +33,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 /* FINAL ESTADOS JSON
 
 
-
+/*/
 
 /* PRODUTO */
 Route::get('/cadastrarProdutos', 'ProdutoControlador@create' )->name('produto_cadastro');
