@@ -1,6 +1,7 @@
 <div class="form-group">
 
 <!--  -->
+    <!-- chocolate -->
     <label for="pf_fornecedor"> Fornecedor:  </label>
 
     <select class="form-control  {{$errors->has('pf_fornecedor') ? 'is-invalid' : '' }}" id='pf_fornecedor' name='pf_fornecedor' value="{{ old('pf_fornecedor') }}">
